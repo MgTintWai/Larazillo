@@ -1,10 +1,10 @@
 <template>
-  <form @submit.prevent="create">
+  <form @submit.prevent="update">
     <div>
       <div>
         <label>Beds</label>
         <input v-model.number="form.beds" type="text" />
-        <div v-if="form.errors.beds" class="text-white bg-danger p-2 rounded my-2">
+        <div v-if="form.errors.beds">
           {{ form.errors.beds }}
         </div>
       </div>
@@ -66,37 +66,34 @@
       </div>
   
       <div>
-        <button type="submit">Create</button>
+        <button type="submit">Update</button>
       </div>
     </div>
   </form>
 </template>
   
 <script setup>
-
-import {useForm} from '@inertiajs/vue3'
-
-const form = useForm({
-  beds: 0,
-  baths: 0,
-  area: 0,
-  city: null,
-  street: null,
-  code: null,
-  street_nr: null,
-  price: 0,
+import { useForm } from '@inertiajs/vue3'
+const props = defineProps({
+  listing: Object,
 })
-
-const create = () => {
-  form.post(route('listing.store'))
-}
-
+const form = useForm({
+  beds: props.listing.beds,
+  baths: props.listing.baths,
+  area: props.listing.area,
+  city: props.listing.city,
+  street: props.listing.street,
+  code: props.listing.code,
+  street_nr: props.listing.street_nr,
+  price: props.listing.price,
+})
+const update = () => form.put(route('listing.update',{listing : props.listing.id}))
 </script>
+  
   <style scoped>
   label {
     margin-right: 2em;
   }
-  
   div {
     padding: 2px
   }
